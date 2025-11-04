@@ -34,6 +34,7 @@ class _classLog
 
     StopLogging()
     {
+        ; TODO: do logging finalization and shutdown
         this.doLogging := false
     }
 

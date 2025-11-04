@@ -16,7 +16,7 @@ Once the settings have been saved, `IC_BrivGemFarm_Run.ahk` can be run by itself
 Instructions:
 1. Save your speed formation in formation save slot 1, in game hotkey "Q". This formation must include Briv and at least one familiar on the field.
 2. Save your stack farming formation in formation save slot 2, in game hotkey "W". Don't include any familiars on the field.
-3. Save your speed formation without Briv in formation save slot 3, in game hotkey "E".
+3. Save your speed formation without Briv, Hew, or Melf in formation save slot 3, in game hotkey "E".
 4. Adjust the settings on the settings tab.
 5. Click the save button to save your settings.
 6. Load into zone 1 of an adventure to farm gems.
@@ -24,7 +24,7 @@ Instructions:
 
 Notes:
 
-1. You can change settings at any point during the run by clicking Save Settings again.
+1. You can can settings at any point during the run by clicking Save Settings again.
 2. First run is ignored for stats, in case it is a partial run.
 3. Settings save to and load from `BrivGemFarmSettings.json` file.
 4. Recommended SB stack level is [Modron Reset Zone] - X, with X = 4 for single skip, X = 6 for double skip, X = 8 for triple skip, and X = 10 for quadruple skip.
@@ -36,6 +36,7 @@ Notes:
 10. Be sure the launcher's settings script `Settings.json` is updated to include the correct game location, otherwise offline stacking will be unable to start the game.
 11. To **stop** BrivGemFarm, press the **stop button**. This will stop the continuous loading of memory reads as well. 
 > **Known Issue:** The updates (Memory read, inventory) will continue to run even after BrivGemFarm has been stopped. Current workaround is to reload the script if you want the updates to stop.
+12. Patrons are currently not supported.
 
 Known Issues:
 1. Cannot always interact with GUI while script is running.
@@ -67,11 +68,10 @@ After passing the zone set as part of 'Farm SB stacks AFTER this zone', the scri
 > **Note:** Offline Progress appears to trigger when 15 seconds have passed between the last save and the next getuserdetails request.  
 
 **Briv swap sleep time (ms):**  
-If you see Briv's landing animation then this value should be made larger. If Briv is not being put back in the formation until after monsters spawn then this value should be made smaller. 2000 to 3000 is the typical range. This value may need to be tweaked again if you use different combinations of potions. 
+If you see Briv's landing animation then this value should be made larger. If Briv is not being put back in the formation until after monsters spawn then this value should be made smaller. 2000 to 3000 is the typical range. This value may need to be tweaked again if you use different combinations of potions.  
 
----
-
-When the game closes for offline stacking, the script will make server calls to buy (100) and/or open (99) chests according to the following settings.  
+**Enable server clals to buy and open chests during stack restart:**  
+When the game closes for offline stacking, the script will make server calls to buy (100) and/or open (99) chests according to the following settings.
 
 **Buy silver chests?:**  
 Purchases 100 silver chests if you have at least 5000 gems above maintain gem number.

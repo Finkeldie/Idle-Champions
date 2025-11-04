@@ -1,6 +1,9 @@
 /*
     Memory Reads Testing
 */
+
+g_TabControlHeight += g_TabControlHeight - Max(g_TabControlHeight, 600) + 105
+
 ; Gui, ICScriptHub:Tab, Stats
 ; Gui, ICScriptHub:Font, w700
 ; Gui, ICScriptHub:Add, Text, x15 y490, SwapTiming Reads:
@@ -66,6 +69,8 @@ class ReadMemoryFunctionsExtended
 
     ReadContinuous()
     {
+      
+        GuiControl, ICScriptHub:, KeyErrorStringID, % "KeyDown: " . g_SF.ErrorKeyDown . " - KeyUp: " . g_SF.ErrorKeyUp
         GuiControl, ICScriptHub:, MultipliersStringID, % this.GetMultipliersString()
         ; GuiControl, ICScriptHub:, FormationCurrentID, % ArrFnc.GetDecFormattedArrayString(g_SF.Memory.GetCurrentFormation())
         ; GuiControl, ICScriptHub:, FormationFavorite1ID, % ArrFnc.GetDecFormattedArrayString(g_SF.Memory.GetFormationByFavorite( favorite := 1))
@@ -91,12 +96,9 @@ class ReadMemoryFunctionsExtended
 
     GetMultipliersString()
     {
+        multipliersString := "["
         multiplierTotal := 1
         size := g_SF.Memory.ReadTimeScaleMultipliersCount()
-        if (size > 0 AND size < 150)
-            multipliersString := "["
-        else
-            return ""
         i := 0
         loop, %size%
         {

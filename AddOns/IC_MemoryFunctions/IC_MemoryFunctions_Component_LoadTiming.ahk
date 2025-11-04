@@ -1,6 +1,11 @@
 /*
     LoadTiming Testing
 */
+
+g_TabControlHeight += 135
+GuiControl, ICScriptHub:Move, ModronTabControl, % "w" . g_TabControlWidth . " h" . g_TabControlHeight
+;Gui, show, % "w" . g_TabControlWidth+5 . " h" . g_TabControlHeight+40
+
 Gui, ICScriptHub:Tab, Memory View
 Gui, ICScriptHub:Font, w700
 Gui, ICScriptHub:Add, Text, x15 y+15, Testing Memory Reads :
@@ -48,6 +53,6 @@ class ReadMemoryFunctionsExtended
 
     Keep()
     {
-        GuiControl, ICScriptHub:, ReadSecondsSinceLastSaveID, % g_SF.Memory.GameManager.game.gameInstances[0].instanceLoadTimeSinceLastSave.Read()
+        GuiControl, ICScriptHub:, ReadSecondsSinceLastSaveID, % g_SF.Memory.GenericGetValue(g_SF.Memory.GameManager.game.gameInstances.instanceLoadTimeSinceLastSave.GetGameObjectFromListValues(0))
     }
 }

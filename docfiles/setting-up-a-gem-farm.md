@@ -29,8 +29,6 @@ Your Modron core should also be set to load a formation that contains every cham
 
 ### Formation 2
 
-Formation 2 is used to farm Steelbones stacks. 
-
 Formation 2, bound to W, will contain your tank team. At minimum this will contain `Briv`. You can also add in health-share champions to this formation. 
 
 Be aware that Gem Farms prosper most when they are right on the edge of success and failure. 
@@ -41,8 +39,7 @@ Remove ALL familiars from the field for this formation. If you're clicking, Briv
 
 ### Formation 3
 
-Formation 3 is used to cancel Briv's jump animation.  
-Formation 3, bound to E, will contain your Briv-swap team. This should (at minimum) be a copy of your Q team with the exception of `Briv`. 
+Formation 3, bound to E, will contain your Briv-swap team. This should (at minimum) be a copy of your Q team with the exception of `Briv` and `Hew Maan`. 
 
 Use the same familiar setup as your Q formation here.
 
@@ -79,7 +76,7 @@ Here's a reminder of the Gem Farm setup screen (along with an explanation of wha
 
 ![Gem Farm setup screen](../docimages/gem-farm-screen.png)
 
-The screenshot may differ from what you see as `IC Script Hub` is still in active development.
+The screenshot is indicative only as `IC Script Hub` is going through rapid development right now.
 
 ### Level Champions with Fkeys?
 
@@ -87,9 +84,11 @@ This setting will determine whether F1-F12 are used to rapidly level your champi
 
 It also automatically determines which F keys are needed from the formation loaded in the Modron core.
 
-### Swap to 'e' formation when on boss zones? (LEGACY)
+### Swap to 'e' formation when on boss zones?
 
->`NEW`: This setting has been removed and replaced with the advanced setting "Preferred Briv Jump Zones" in advanced settings. Disabling Mod5(5) will effectively accomplish the same thing. See "Gem Farm Hidden Settings" below to see where to find the new setting.
+This is only really important if you have a sufficiently high level `Briv` capable of jumping from Boss to Boss. 
+
+Anyone with a Briv that is not 4- or 9-skip can leave this box unchecked.
 
 ### Enable manual resets to recover from failed Briv stacking?
 
@@ -147,6 +146,14 @@ This will have side effects in that you may no longer have time to buy or open c
 
 You may also have less reliable offline stacking if you reduce the number too much.
 
+### Maximum time (ms) script will wait for Dash (0 disables)
+
+Most people can leave this as the default. This can be set to 0 when you are using enough potions to ensure that you have 10x acceleration at all times.
+
+### Briv Jump Timer (ms)
+
+This value no longer exists in the latest GUI and this entry will be removed when the screenshot is updated.
+
 ### Enable server calls to buy and open chests during stack restart?
 
 If this is unchecked, none of the boxes below will have any effect.
@@ -182,9 +189,9 @@ Just pop the value of the gems you want to save up or keep as a buffer in here.
 * If you have opted to use health-share tanks to increase the number of stacks you get for `Briv`: create a copy of your Q formation, add these tanks into there, and set that formation as your Modron core formation. The tanks will get auto levelled in the early zones, but not slow down your run by being in the Q formation.
 * Turn off all damage nodes in your Modron core and save it as a new setup. Load this setup as a part of your Gem Farm pre-setup. This allows your Briv to stack earlier, both normally and in recovery situations.
 
-## Gem Farm: Advanced settings
+## Gem Farm: Hidden settings
 
-There are a number of settings that are hidden by default. These are available in the Gem Farm Advanced Settings addon, which is included by default. Click the Jigsaw icon, and enable the Gem Farm Advanced addon to see these. [I cover those over here](gem-farm-advanced-settings.md).
+There are a number of settings that are hidden by default. [I cover those over here](gem-farm-hidden-settings.md).
 
 [< Return to an Introduction to IC Script Hub](an-introduction-to-ic-script-hub.md)
 

@@ -435,7 +435,6 @@ class _ClassMemory
 
     read(address, type := "UInt", aOffsets*)
     {
-        result := ""
         ; If invalid type RPM() returns success (as bytes to read resolves to null in dllCall())
         ; so set errorlevel to invalid parameter for DLLCall() i.e. -2
         if !this.aTypeSize.hasKey(type)
@@ -839,8 +838,6 @@ class _ClassMemory
 
     isTargetProcess64Bit(PID, hProcess := "", currentHandleAccess := "")
     {
-        Wow64Process := ""
-        closeHandle := ""
         if !A_Is64bitOS
             return False 
         ; If insufficient rights, open a temporary handle
@@ -954,7 +951,6 @@ class _ClassMemory
     ; is ignored and the function provides the same results as the EnumProcessModules function.
     EnumProcessModulesEx(byRef lphModule, dwFilterFlag := 0x03)
     {
-        reqSize := ""
         lastError := A_LastError
         size := VarSetCapacity(lphModule, 4)
         loop 

@@ -3,21 +3,24 @@ g_TabControlWidth := Max(g_TabControlHeight, (525+10))
 GUIFunctions.AddTab("FullMemoryFunctions")
 
 Gui, ICScriptHub:Tab, FullMemoryFunctions
-Gui, ICScriptHub:Add, Button, x+215 w160 gIC_MemoryFunctionsFullRead_Component.ReadAllFunctions, Load Memory Functions
-Gui, ICScriptHub:Add, Button, x+10 w135 gIC_MemoryFunctionsFullRead_Component.SwapPointers, Change Pointers
+Gui, ICScriptHub:Add, Button, x+220 w160 gIC_MemoryFunctionsFullRead_Component.ReadAllFunctions, Load Memory Functions
 Gui, ICScriptHub:Font, w700
 Gui, ICScriptHub:Add, Text, x15 yp+5, `All Memory Functions:
 Gui, ICScriptHub:Font, w400
-Gui, ICScriptHub:Add, Checkbox,x145 yp+0 vMemoryFunctionsFullRead_LoadHandlers, Champions
 
-GUIFunctions.UseThemeTextColor("TableTextColor")
-Gui, ICScriptHub:Add, ListView, x15 y+8 w525 h650 vMemoryFunctionsViewID, Function|Time(s)|x|Value
+if(g_isDarkMode)
+    Gui, Font, g_CustomColor
+Gui, ICScriptHub:Add, ListView, x15 y+8 w525 h650 vMemoryFunctionsViewID, Function|x|Value
+if(g_isDarkMode)
+{
+    GuiControl,ICScriptHub: +Background888888, MemoryFunctionsViewID
+    Gui, ICScriptHub:Font, cSilver
+}
 
-GUIFunctions.UseThemeListViewBackgroundColor("MemoryFunctionsViewID")
-GUIFunctions.UseThemeTextColor("DefaultTextColor")
 class IC_MemoryFunctionsFullRead_Component
 {
-    static exclusionList := [ "__Init", "__new",  "BinarySearchList", "GenericGetValue", "OpenProcessReader", "ReadConversionCurrencyBySlot", "BuildChestIndexList", "InitializeChestsIndices", "ReadUserHash", "ReadUserID" ]
+    static exclusionList := [ "__Init", "__new",  "BinarySearchList", "ConvQuadToString", "ConvQuadToString2", "ConvQuadToString3", "GenericGetValue", "OpenProcessReader", "ReadConversionCurrencyBySlot", "ReadUserHash", "ReadUserID", "ReadTimeScaleMultipliersKeyByIndex", "AdjustObjectListIndexes" ]
+
     InExclusionsList(value)
     {
         static
@@ -38,12 +41,11 @@ class IC_MemoryFunctionsFullRead_Component
     }
 
     ; Current valid ERRORs to reads using value 1:
+    ;   ReadTimeScaleMultipliersKeyByIndex - May be modron core speed which won't read effect data
     ;   ReadChampIDBySlot - make sure a champion is in slot 1 on the game field or this will have an error. (game field slots start at 0 at the far right and count: right to left, top to bottom)
     ;   ReadUltimateButtonChampIDByItem - Must have at least 2 ultimate abilities unlocked or this will error.
     ReadAllFunctions()
     {
-        Gui, ICScriptHub:Submit, NoHide
-        global MemoryFunctionsFullRead_LoadHandlers
         IC_MemoryFunctionsFullRead_Component.RefreshSize()
         restore_gui_on_return := GUIFunctions.LV_Scope("ICScriptHub", "MemoryFunctionsViewID")
         valueToPass := 1
@@ -55,24 +57,14 @@ class IC_MemoryFunctionsFullRead_Component
             {
                 parameterString := k . (v.MaxParams > 4 ? "(...)" : (v.MaxParams > 3 ? "(x,y,z)" : (v.MaxParams > 2 ? "(x,y)" : (v.MaxParams > 1 ? "(x)" : ""))))
                 fncToCall := ObjBindMethod(g_SF.Memory, k)
-                lastTick := A_TickCount
                 value := v.Maxparams >= 2 ? fncToCall.Call(valueToPass) : fncToCall.Call()
-                timeToExec := (A_TickCount - lastTick) / 1000
-                numberCheck := value[1]
-                if numberCheck is number
-                    value := ArrFnc.GetDecFormattedArrayString(value) ; 0 based arrays lose first element (0) since A_Index starts at 1 and not 0.
-                else if IsObject(value)
-                    value := ArrFnc.GetAlphaNumericArrayString(value)
+                value := IsObject(value) ? ArrFnc.GetDecFormattedArrayString(value) : value
                 value := value == "" ? "-- ERROR --" : value
                 valuePassedString := (v.Maxparams >= 2 ? "(" . valueToPass . ")" : "")
-                LV_Add(, parameterString, timeToExec, valuePassedString, value)
+                LV_Add(, parameterString, valuePassedString, value)
             }
         }
-        if(!MemoryFunctionsFullRead_LoadHandlers)
-        {
-            LV_ModifyCol()
-            return
-        }
+
         for k,v in ActiveEffectKeySharedFunctions ; Class
         {
             for k1, v1 in v ; Champions
@@ -81,29 +73,19 @@ class IC_MemoryFunctionsFullRead_Component
                 {
                     if( isFunc(v2) ) ; Handler Fields/Functions
                     {
-                        parameterString := k . "..." . k2 . (v2.MaxParams > 4 ? "(...)" : (v2.MaxParams > 3 ? "(x,y,z)" : (v2.MaxParams > 2 ? "(x,y)" : (v2.MaxParams > 1 ? "(x)" : ""))))
+                        parameterString := k1 . "..." . k2 . (v2.MaxParams > 4 ? "(...)" : (v2.MaxParams > 3 ? "(x,y,z)" : (v2.MaxParams > 2 ? "(x,y)" : (v2.MaxParams > 1 ? "(x)" : ""))))
                         currentObject := ActiveEffectKeySharedFunctions[k][k1]
                         fncToCall := ObjBindMethod(currentObject, k2)
-                        lastTick := A_TickCount
                         value := v2.Maxparams >= 2 ? fncToCall.Call(valueToPass) : fncToCall.Call()
-                        timeToExec := (A_TickCount - lastTick) / 1000
-                        value := IsObject(value) ? ArrFnc.GetAlphaNumericArrayString(value) : value
+                        value := IsObject(value) ? ArrFnc.GetDecFormattedArrayString(value) : value
                         value := value == "" ? "-- ERROR --" : value
                         valuePassedString := (v2.Maxparams >= 2 ? "(" . valueToPass . ")" : "")
-                        LV_Add(, parameterString, timeToExec, valuePassedString, value)
+                        LV_Add(, parameterString, valuePassedString, value)
                     }
                 }
             }
         }
         LV_ModifyCol()
-    }
-
-    SwapPointers()
-    {
-        MsgBox, Closing Script Hub and running the pointer version picker.
-        versionPickerLoc := A_LineFile . "\..\..\IC_Core\IC_VersionPicker.ahk"
-        Run, %versionPickerLoc%
-        ExitApp
     }
 }
 
