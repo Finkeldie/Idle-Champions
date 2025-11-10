@@ -1,12 +1,20 @@
 {
 	"Addon Order":[
 		{
-			"Name":"Addon Example",
-			"Version":"v0.1."
+			"Name":"IC Core",
+			"Version":"v0.2.4"
+		},
+		{
+			"Name":"BrivGemFarm LevelUp",
+			"Version":"v1.4.7"
 		},
 		{
 			"Name":"About",
 			"Version":"v0.3.4"
+		},
+		{
+			"Name":"Addon Example",
+			"Version":"v0.1."
 		},
 		{
 			"Name":"Area Timing",
@@ -23,10 +31,6 @@
 		{
 			"Name":"BrivGemFarm HybridTurboStacking",
 			"Version":"v1.1.5"
-		},
-		{
-			"Name":"BrivGemFarm LevelUp",
-			"Version":"v1.4.7"
 		},
 		{
 			"Name":"Briv Gem Farm",
@@ -47,10 +51,6 @@
 		{
 			"Name":"Chest Purchaser",
 			"Version":"v0.3.1"
-		},
-		{
-			"Name":"IC Core",
-			"Version":"v0.2.4"
 		},
 		{
 			"Name":"Game Location Settings",
@@ -91,6 +91,16 @@
 	],
 	"Enabled Addons":[
 		{
+			"Name":"IC Core",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_Core",
+			"Version":"v0.2.4"
+		},
+		{
+			"Name":"BrivGemFarm LevelUp",
+			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_BrivGemFarm_LevelUp_Extra",
+			"Version":"v1.4.7"
+		},
+		{
 			"Name":"About",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_About",
 			"Version":"v0.3.4"
@@ -101,19 +111,19 @@
 			"Version":"v0.2.5"
 		},
 		{
-			"Name":"BrivGemFarm LevelUp",
-			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_BrivGemFarm_LevelUp_Extra",
-			"Version":"v1.4.7"
-		},
-		{
 			"Name":"Briv Gem Farm",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Performance",
 			"Version":"v1.6.5"
 		},
 		{
-			"Name":"IC Core",
-			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_Core",
-			"Version":"v0.2.4"
+			"Name":"Chest Purchaser",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_ChestPurchaser",
+			"Version":"v0.3.1"
+		},
+		{
+			"Name":"RNG Waiting Room",
+			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_RNGWaitingRoom_Extra",
+			"Version":"v0.2.2"
 		}
 	]
 }
