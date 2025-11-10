@@ -17,6 +17,7 @@ class IC_BrivGemFarm_Class
     BossKillAttempt := False
     previousSilverChestCount := 0
     previousGoldChestCount := 0
+    DoneLeveling := False
 
     ;=====================================================
     ;Primary Functions for Briv Gem Farm
@@ -66,7 +67,7 @@ class IC_BrivGemFarm_Class
     ;=====================================================
     ;Primary Gem Farm loop functions
     ;=====================================================
-    ; setup steps to take to set up gem farm before starting the primary loop.
+    ; setup steps to take to set up gem farm before starting the primary loop. Returns 0 on normal, negative on error.
     GemFarmPreLoopSetup(includeBrivFormation3 := False)
     {
         g_SharedData.TriggerStart := true
@@ -74,7 +75,8 @@ class IC_BrivGemFarm_Class
         existingProcessID := g_UserSettings[ "ExeName"]
         Process, Exist, %existingProcessID%
         g_SF.PID := ErrorLevel
-        Process, Priority, % g_SF.PID, High
+        ; Process, Priority, % g_SF.PID, High
+        Process, Priority, % g_SF.PID, Realtime
         g_SF.Memory.OpenProcessReader()
         if ((g_SF.CurrentAdventure := g_SF.VerifyAdventureLoaded()) < 0)
             return -2
@@ -94,6 +96,9 @@ class IC_BrivGemFarm_Class
         this.ThelloraRushZone := g_SF.Memory.GetFavorExponentFor("Corellon") + 1
         g_PreviousZoneStartTime := A_TickCount
         g_SharedData.StackFail := 0
+        if (g_SF.Memory.ReadNumAttackingMonstersReached() >= 10 || g_SF.Memory.ReadNumRangedAttackingMonsters())
+            g_SF.FallBackFromZone(2000)
+        g_SF.SetFormation(g_BrivUserSettings)
         return 0
     }
 
@@ -112,6 +117,7 @@ class IC_BrivGemFarm_Class
         this.StackFailAreasThisRunTally := {}
         this.StackFailRetryAttempt := 0
         this.DoneLeveling := False
+        g_SF.FormationLevelingLock := False
         g_SF.AlreadyOfflineStackedThisRun := false
         g_SharedData.BossesHitThisRun := 0
         g_SharedData.SwapsMadeThisRun := 0
@@ -147,7 +153,7 @@ class IC_BrivGemFarm_Class
         if (this.DoKeySpam AND g_BrivUserSettings[ "Fkeys" ] AND g_SF.AreChampionsUpgraded(formationModron)) 
         { ; leveling completed, remove champs from keyspam.
             g_SF.DirectedInput(hold:=0,release:=1, this.keyspam) ;keysup
-            g_SF.keyspam := ["{ClickDmg}"]
+            ; g_SF.keyspam := ["{ClickDmg}"]
             this.DoKeySpam := false
         }
         g_SF.InitZone( this.keyspam )
@@ -197,7 +203,7 @@ class IC_BrivGemFarm_Class
                 champID := g_SF.Memory.ReadSelectedChampIDBySeat(seatID)
                 if(this.CanAffordUpgrade(champID) AND !g_SF.Memory.ReadBoughtLastUpgradeBySeat(seatID))
                 {
-                    if(!g_SF.MemoryDoesChampHavePurchasedWithoutUpgraded(champID))
+                    if(!g_SF.Memory.DoesChampHavePurchasedWithoutUpgraded(champID))
                     ; if(!(g_SF.Memory.ReadChampLvlByID(champID) > (g_SF.Memory.GetHighestLevelRequiredForUpgradesByChampID(champID)) + 100))
                         index := index + 1, currKeySpam.Push(keyspam[index - 1]) ; increment index but add index from before increment
                 }
@@ -208,15 +214,14 @@ class IC_BrivGemFarm_Class
             }
             if(currKeyspam.Length() > 0)
             {
+                ; TODO: Handle clicks without directed input w/ champs
                 currKeySpam.Push("{ClickDmg}")
                 g_SF.DirectedInput(,,currKeySpam*)
                 Sleep, %sleepTime%
             }
-            else
-                this.DoneLeveling := True
         }
         else
-            currKeySpam.Push("{ClickDmg}")
+            this.DoneLeveling := True, currKeySpam.Push("{ClickDmg}")
         g_SF.DirectedInput(currKeySpam*)
     }
 
@@ -264,8 +269,10 @@ class IC_BrivGemFarm_Class
                 this.StackFarm()
             return 0
         }
+        if ("" == (hasteStacks := g_SF.Memory.ReadHasteStacks())) ; can't read haste, skip next steps
+            return stackFail
         ; stack briv between min zone and stack zone if briv is out of jumps (if stack fail recovery is on)
-        if (g_SF.Memory.ReadHasteStacks() < 50 AND stacks < targetStacks AND CurrentZone >= g_BrivUserSettings[ "MinStackZone" ] AND g_BrivUserSettings[ "StackFailRecovery" ] AND CurrentZone <= g_BrivUserSettings[ "StackZone" ] )
+        if (hasteStacks < 50 AND stacks < targetStacks AND CurrentZone >= g_BrivUserSettings[ "MinStackZone" ] AND g_BrivUserSettings[ "StackFailRecovery" ] AND CurrentZone <= g_BrivUserSettings[ "StackZone" ] )
         {
             ; only use current zone if there's been no/non-excess issues with it.
             if (!this.StackFailAreasThisRunTally[CurrentZone] AND (!this.StackFailAreasTally[CurrentZone] OR this.StackFailAreasTally[CurrentZone] < this.MaxStackRestartFails))
@@ -278,7 +285,7 @@ class IC_BrivGemFarm_Class
             return 0
         }
         ; Briv ran out of jumps but has enough stacks for a new adventure, restart adventure. With protections from repeating too early or resetting within 5 zones of a reset.
-        if (g_SF.Memory.ReadHasteStacks() < 50 AND stacks >= targetStacks AND g_SF.Memory.ReadHighestZone() > 10 AND (g_SF.Memory.GetModronResetArea() - g_SF.Memory.ReadHighestZone() > 5 ))
+        if (hasteStacks < 50 AND stacks >= targetStacks AND g_SF.Memory.ReadHighestZone() > 10 AND (g_SF.Memory.GetModronResetArea() - g_SF.Memory.ReadHighestZone() > 5 ))
         {
             stackFail := StackFailStates.FAILED_TO_REACH_STACK_ZONE_HARD ; 4
             g_SharedData.StackFailStats.TALLY[stackfail] += 1
@@ -294,7 +301,7 @@ class IC_BrivGemFarm_Class
         gemsMax := g_BrivUserSettings[ "ForceOfflineGemThreshold" ]
         runsMax := g_BrivUserSettings[ "ForceOfflineRunThreshold" ]
         ; hybrid stacking not used. Use default test for offline stacking. 
-        if !( (gemsMax > 1) OR (runsMax > 0) )
+        if !( (gemsMax > 0) OR (runsMax > 1) )
             return ( g_BrivUserSettings [ "RestartStackTime" ] > 0 )
         ; hybrid and already offline stacked
         if (g_SF.AlreadyOfflineStackedThisRun)
@@ -306,7 +313,7 @@ class IC_BrivGemFarm_Class
         if (runsMax > 1)
         {
             memRead := g_SF.Memory.ReadResetsCount()
-            if (memRead > 0 AND Mod( memRead, runsMax ) = 0)
+            if (memRead > 0 AND Mod( memRead, runsMax ) == 0)
                 return 1
         }
         ; hybrid stacking enabled but conditions for offline stacking not met
@@ -362,11 +369,12 @@ class IC_BrivGemFarm_Class
         StartTime := A_TickCount
         ElapsedTime := 0
         counter := 0
-        sleepTime := 100
+        sleepTime := 60
         g_SharedData.LoopString := "Setting stack farm formation."
+        stackFormation := g_SF.Memory.GetFormationByFavorite(2)
         isFormation2 := g_SF.Memory.ReadMostRecentFormationFavorite() == 2 AND IC_BrivGemFarm_Class.BrivFunctions.HasSwappedFavoritesThisRun
         if (!isFormation2)
-            if(g_SF.IsCurrentFormation(stackFormation))
+            if(g_SF.IsCurrentFormationLazy(stackFormation, 2))
                 isFormation2 := True
         while (!isFormation2 AND ElapsedTime < 5000 )
         {
@@ -376,7 +384,7 @@ class IC_BrivGemFarm_Class
             ; Can't formation switch when under attack.
             isFormation2 := g_SF.Memory.ReadMostRecentFormationFavorite() == 2 AND IC_BrivGemFarm_Class.BrivFunctions.HasSwappedFavoritesThisRun
             if (!isFormation2)
-                if(g_SF.IsCurrentFormation(g_SF.Memory.GetFormationByFavorite(2)))
+                if(g_SF.IsCurrentFormationLazy(stackFormation, 2))
                     isFormation2 := True
             if (ElapsedTime > 1000 AND !isFormation2 && g_SF.Memory.ReadNumAttackingMonstersReached() > 10 || g_SF.Memory.ReadNumRangedAttackingMonsters())
                  ; not W formation or briv is benched

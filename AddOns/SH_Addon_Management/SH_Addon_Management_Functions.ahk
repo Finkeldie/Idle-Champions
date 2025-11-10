@@ -80,7 +80,8 @@ Class AddonManagement
             currDependency := this.GetAddon(v.Name, v.Version, indexODependency)
             if (!IsObject(currDependency))
             {
-                MsgBox, 48, Warning, % "Can't find the addon """ . v.Name . " " . v.Version . """ required by " . Name . "`n" . Name . " will be disabled."
+                if(!this.ShowAddonGUI)
+                    MsgBox, 48, Warning, % "Can't find the addon """ . v.Name . " " . v.Version . """ required by " . Name . "`n" . Name . " will be disabled."
                 this.DisableAddon(Name,Version)
                 return false
             }
@@ -93,7 +94,10 @@ Class AddonManagement
             ; Check if current version or newer dependency is enabled
             if (!currDependency.Enabled)
             {
-                MsgBox, 52, Warning, % "Addon " . currDependency.Name . " is required by " . currAddon.Name . " but is disabled!`nDo you want to Enable this addon?`nYes: Enable " . currDependency.Name . "`nNo: Disable " . Name
+                if(!this.ShowAddonGUI)
+                    MsgBox, 52, Warning, % "Addon " . currDependency.Name . " is required by " . currAddon.Name . " but is disabled!`nDo you want to Enable this addon?`nYes: Enable " . currDependency.Name . "`nNo: Disable " . Name
+                else ; assume MsgBox yes on skip Msg
+                    isEnabled := this.EnableAddon(currDependency.Name,currDependency.Version), isModified := isEnabled OR isModified
                 IfMsgBox Yes 
                 {
                     isEnabled := this.EnableAddon(currDependency.Name,currDependency.Version)
@@ -154,23 +158,30 @@ Class AddonManagement
     ;             0: No problem
     ;
     ; ------------------------------------------------------------
-    CheckDependencyOrder(AddonNumber,PositionWanted,dependencyType := "Dependencies")
+    CheckDependencyOrder(AddonNumber,PositionWanted,dependencyType := "Dependencies", checkAbove := True)
     {
-        ; Check to make sure none of this addon's dependencies are before it
-        for k, v in this.Addons[AddonNumber][dependencyType]
+        ; Check the target's dependencies for this (move down)
+        for k,dependency in this.Addons[PositionWanted][dependencyType]
         {
-            this.GetAddon(v.Name, v.Version, indexOfDependency)
-            if(indexOfDependency >= PositionWanted)
-                return indexOfDependency
-        }
-        ; Check to make sure this addon is not after any addons that depend on it 
-        for k,v in this.AddonsEnabled
-        {
-            for _, dependency in v[dependencyType]
+            this.GetAddon(dependency.Name, dependency.Version, indexOfDependency)
+            if(this.Addons[AddonNumber]["Name"] == dependency.Name AND SH_VersionHelper.IsVersionSameOrNewer(this.Addons[AddonNumber]["Version"], dependency.Version))
             {
-                if(this.Addons[AddonNumber]["Name"] == dependency.Name AND SH_VersionHelper.IsVersionSameOrNewer(this.Addons[AddonNumber]["Version"], dependency.Version))
-                    if (k <= PositionWanted)
-                        return k
+                if (k > PositionWanted AND checkAbove)
+                    return k
+                if (k <= PositionWanted AND !checkAbove)
+                    return k
+            }
+        }
+        ; Check the this's dependencies for target (move up)
+        for k,dependency in this.Addons[AddonNumber][dependencyType]
+        {
+            this.GetAddon(dependency.Name, dependency.Version, indexOfDependency)
+            if(this.Addons[PositionWanted]["Name"] == dependency.Name AND SH_VersionHelper.IsVersionSameOrNewer(this.Addons[PositionWanted]["Version"], dependency.Version))
+            {
+                if (k < AddonNumber AND checkAbove)
+                    return k
+                if (k >= AddonNumber AND !checkAbove)
+                    return k
             }
         }
         return 0
@@ -214,7 +225,10 @@ Class AddonManagement
         }
         while(DependedAddon := this.CheckIsDependedOn(Name,Version))
         {
-            MsgBox, 52, Warning, % "Addon " . this.Addons[DependedAddon]["Name"] . " needs " . Name . ".`nDo you want to disable this addon?`nYes: Disable " . this.Addons[DependendAddon]["Name"] . "`nNo: Keep " . Name . " enabled."
+            if(!this.ShowAddonGUI)
+                MsgBox, 52, Warning, % "Addon " . this.Addons[DependedAddon]["Name"] . " needs " . Name . ".`nDo you want to disable this addon?`nYes: Disable " . this.Addons[DependendAddon]["Name"] . "`nNo: Keep " . Name . " enabled."
+            else ; assume MsgBox yes on skip Msg
+                this.DisableAddon(this.Addons[DependedAddon]["Name"],this.Addons[DependedAddon]["Version"])
             IfMsgBox Yes 
             {
                 this.DisableAddon(this.Addons[DependedAddon]["Name"],this.Addons[DependedAddon]["Version"])
@@ -252,7 +266,7 @@ Class AddonManagement
         ; Check if another version is already enabled
         for k,v in this.Addons 
         {
-            if(v.Name = Name AND v.Version != Version AND v.Enabled)
+            if(v.Name = Name AND v.Version != Version AND v.Enabled AND !this.ShowAddonGUI)
             {
                 MsgBox, 48, Warning, % "Another version of " . v.Name . " is already enabled, please disable that addon first!"
                 return 1
@@ -326,6 +340,10 @@ Class AddonManagement
         ; Show Addon GUI if no addons loaded
         if((this.EnabledAddons).Count() <= 0)
             this.ShowAddonGUI := True
+        if(this.ShowAddonGUI) ; TODO: no addons enabled, reorder to proper order and save ordering
+        {
+
+        }
         for k, v in this.EnabledAddons
         {
             versionValue := v.Version
@@ -404,7 +422,7 @@ Class AddonManagement
             ; Search for the correct Addon
             this.GetAddon(v.Name, v.Version, addonIndex) 
             ; put the addons in order
-            if (k != addonIndex)
+            if (k != addonIndex and addonIndex != "")
                 this.SwitchOrderAddons(addonIndex,k, true)
         }
     }
@@ -418,12 +436,12 @@ Class AddonManagement
     ;     Return: Moves the Addons to wanted position if possible
     ;
     ; ------------------------------------------------------------
-    SwitchOrderAddons(AddonNumber,Position, Force := false)
+    SwitchOrderAddons(AddonNumber,Position, Force := false, checkAbove := True)
     {
         ; If can't rearrange due to dependencies, return false
-        if (this.CheckDependencyOrder(AddonNumber,Position) AND !Force)
+        if (this.CheckDependencyOrder(AddonNumber,Position, "Dependencies", checkAbove) AND !Force)
             return false
-        if (this.CheckDependencyOrder(AddonNumber,Position, "LoadAfter") AND !Force)
+        if (this.CheckDependencyOrder(AddonNumber,Position, "LoadAfter", checkAbove) AND !Force)
             return false
         NumberOfAddons := this.Addons.Count()
         temp := this.Addons[Position]
@@ -512,10 +530,15 @@ Class AddonManagement
         GuiControl, AddonInfo: , AddonInfoAuthorID, % Addon.Author
         GuiControl, AddonInfo: , AddonInfoInfoID, % Addon.Info
         DependenciesText := ""
+        LoadAfterText := ""
         for k,v in Addon.Dependencies {
             DependenciesText .= "- " . v.Name . ": " . v.Version "`n"
         }
         GuiControl, AddonInfo: , AddonInfoDependenciesID, % DependenciesText
+        for k,v in Addon.LoadAfter {
+            LoadAfterText .= "- " . v.Name . ": " . v.Version "`n"
+        }
+        GuiControl, AddonInfo: , AddonInfoLoadAfterID, % LoadAfterText
         Gui, AddonInfo:Show
         GUIFunctions.UseThemeTitleBar("AddonInfo")
     }
@@ -559,13 +582,12 @@ Class AddonManagement
     ;       Return: None
     ;
     ; ------------------------------------------------------------
-    GetAddon(Name, Version, byref i := "")
+    GetAddon(Name, Version, byref i := "", enabledOnly := False)
     {
         ; try to find exact match
         for k,v in this.Addons
         {
-            if (v.Name == Name AND v.Version == Version)
-            {
+            if (v.Name == Name AND v.Version == Version) {
                 i := k
                 return v
             }
@@ -573,8 +595,7 @@ Class AddonManagement
         ; try to higher version match
         for k,v in this.Addons
         {
-            if (v.Name == Name AND SH_VersionHelper.IsVersionSameOrNewer(v.Version,Version))
-            {
+            if (v.Name == Name AND SH_VersionHelper.IsVersionSameOrNewer(v.Version,Version)) {
                 i := k
                 return v
             }

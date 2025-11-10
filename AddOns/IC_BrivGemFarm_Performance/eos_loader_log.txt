@@ -1,3 +1,0 @@
-Mon Nov 10 20:59:38 2025
-    Couldn't load EOSSDK dll: Kan opgegeven module niet vinden.
-

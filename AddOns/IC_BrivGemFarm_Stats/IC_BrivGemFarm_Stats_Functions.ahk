@@ -57,7 +57,15 @@ class IC_BrivGemFarm_Stats_Component
             }
         }
     }
-
+	
+    ; Adds IC_BrivGemFarm_Stats_Addon.ahk to the startup of the Briv Gem Farm script.
+    InjectAddon(external := false)
+    {
+        splitStr := StrSplit(A_LineFile, "\")
+        addonDirLoc := splitStr[(splitStr.Count()-1)]
+        addonLoc := "#include *i %A_LineFile%\..\..\" . addonDirLoc . "\IC_BrivGemFarm_Stats_Addon.ahk`n"
+        FileAppend, %addonLoc%, %g_BrivFarmModLoc%
+    }
 
     ;======================
     ; GUI Building Functions
@@ -100,10 +108,7 @@ class IC_BrivGemFarm_Stats_Component
     AddCurrentRunGroup()
     {
         global
-        if(IsObject(IC_BrivGemFarm_Component))
-            GuiControlGet, pos, ICScriptHub:Pos, BrivGemFarmStatsPlayButton
-        else
-            GuiControlGet, pos, ICScriptHub:Pos, Reset_Briv_Farm_Stats_Button
+        GuiControlGet, pos, ICScriptHub:Pos, Reset_Briv_Farm_Stats_Button
         posY := posY + 30
         Gui, ICScriptHub:Font, w700
         Gui, ICScriptHub:Add, GroupBox, x%posX% y%posY% w450 h140 vCurrentRunGroupID, Current `Run:
@@ -427,7 +432,7 @@ class IC_BrivGemFarm_Stats_Component
             g_MouseToolTips[ShiniesClassNN] := this.GetShinyCountTooltip()
         }
         this.GemsTotal := ( g_SF.Memory.ReadGems() - this.GemStart ) + gemsSpent
-        this.UpdateStartLoopStatsGUI(this.TotalFarmTime)
+        this.UpdateStartLoopStatsGUI()
         if (foundComs)
             this.SharedRunData.StackFail := this.StackFail := 0
     }
@@ -462,7 +467,7 @@ class IC_BrivGemFarm_Stats_Component
             GuiControl, ICScriptHub:, GoldsDroppedID, % this.DecideScientific(this.CalculateDroppedChests(currentGoldChests, 2))
             GuiControl, ICScriptHub:, ShiniesID, % this.SharedRunData.ShinyCount
         }
-        if(this.TotalFarmTime == "")
+        if(this.TotalFarmTime == "" OR g_SF.Memory.GetCoreXPByInstance(this.ActiveGameInstance) == "" )
             return
         GuiControl, ICScriptHub:, AvgRunTimeID, % this.FormatMsec(this.TotalFarmTime / this.TotalRunCount)
         GuiControl, ICScriptHub:, dtTotalTimeID, % this.FormatMsec(this.TotalFarmTime)
