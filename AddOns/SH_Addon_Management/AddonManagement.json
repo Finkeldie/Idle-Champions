@@ -2,7 +2,7 @@
 	"Addon Order":[
 		{
 			"Name":"IC Core",
-			"Version":"v0.1.11"
+			"Version":"v0.2.1"
 		},
 		{
 			"Name":"About",
@@ -10,11 +10,11 @@
 		},
 		{
 			"Name":"Briv Gem Farm",
-			"Version":"v1.5.14"
+			"Version":"v1.6.2"
 		},
 		{
 			"Name":"Briv Gem Farm Stats",
-			"Version":"v1.2.12"
+			"Version":"v1.3.0"
 		},
 		{
 			"Name":"Chest Purchaser",
@@ -75,13 +75,25 @@
 		{
 			"Name":"Example of an Addon (NOT FOR USE!)",
 			"Version":"v0.1.2"
+		},
+		{
+			"Name":"Jimothy",
+			"Version":"v1.0.2"
+		},
+		{
+			"Name":"Briv Gem Farm Potato",
+			"Version":"v1.0.1"
+		},
+		{
+			"Name":"Addon Example",
+			"Version":"v0.1."
 		}
 	],
 	"Enabled Addons":[
 		{
 			"Name":"IC Core",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_Core",
-			"Version":"v0.1.11"
+			"Version":"v0.2.1"
 		},
 		{
 			"Name":"About",
@@ -91,12 +103,12 @@
 		{
 			"Name":"Briv Gem Farm",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Performance",
-			"Version":"v1.5.14"
+			"Version":"v1.6.2"
 		},
 		{
 			"Name":"Briv Gem Farm Stats",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Stats",
-			"Version":"v1.2.12"
+			"Version":"v1.3.0"
 		},
 		{
 			"Name":"Chest Purchaser",
