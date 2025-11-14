@@ -5,12 +5,28 @@
 			"Version":"v0.2.4"
 		},
 		{
+			"Name":"Briv Gem Farm",
+			"Version":"v1.6.5"
+		},
+		{
+			"Name":"Briv Gem Farm Stats",
+			"Version":"v1.3.2"
+		},
+		{
 			"Name":"BrivGemFarm LevelUp",
 			"Version":"v1.4.7"
 		},
 		{
+			"Name":"Chest Purchaser",
+			"Version":"v0.3.1"
+		},
+		{
 			"Name":"About",
 			"Version":"v0.3.4"
+		},
+		{
+			"Name":"RNG Waiting Room",
+			"Version":"v0.2.2"
 		},
 		{
 			"Name":"Addon Example",
@@ -33,24 +49,12 @@
 			"Version":"v1.1.5"
 		},
 		{
-			"Name":"Briv Gem Farm",
-			"Version":"v1.6.5"
-		},
-		{
 			"Name":"Briv Gem Farm Potato",
 			"Version":"v1.0.1"
 		},
 		{
 			"Name":"BrivGemFarm Stack and Stop",
 			"Version":"v0.0.1"
-		},
-		{
-			"Name":"Briv Gem Farm Stats",
-			"Version":"v1.3.2"
-		},
-		{
-			"Name":"Chest Purchaser",
-			"Version":"v0.3.1"
 		},
 		{
 			"Name":"Game Location Settings",
@@ -77,10 +81,6 @@
 			"Version":"v1.0.3"
 		},
 		{
-			"Name":"RNG Waiting Room",
-			"Version":"v0.2.2"
-		},
-		{
 			"Name":"Theme Manager",
 			"Version":"v0.0.3"
 		},
@@ -96,24 +96,19 @@
 			"Version":"v0.2.4"
 		},
 		{
-			"Name":"BrivGemFarm LevelUp",
-			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_BrivGemFarm_LevelUp_Extra",
-			"Version":"v1.4.7"
-		},
-		{
-			"Name":"About",
-			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_About",
-			"Version":"v0.3.4"
-		},
-		{
-			"Name":"BrivGemFarm Advanced Settings",
-			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_AdvancedSettings",
-			"Version":"v0.2.5"
-		},
-		{
 			"Name":"Briv Gem Farm",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Performance",
 			"Version":"v1.6.5"
+		},
+		{
+			"Name":"Briv Gem Farm Stats",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Stats",
+			"Version":"v1.3.2"
+		},
+		{
+			"Name":"BrivGemFarm LevelUp",
+			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_BrivGemFarm_LevelUp_Extra",
+			"Version":"v1.4.7"
 		},
 		{
 			"Name":"Chest Purchaser",
@@ -121,9 +116,19 @@
 			"Version":"v0.3.1"
 		},
 		{
+			"Name":"About",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_About",
+			"Version":"v0.3.4"
+		},
+		{
 			"Name":"RNG Waiting Room",
 			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_RNGWaitingRoom_Extra",
 			"Version":"v0.2.2"
+		},
+		{
+			"Name":"BrivGemFarm Advanced Settings",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_AdvancedSettings",
+			"Version":"v0.2.5"
 		}
 	]
 }

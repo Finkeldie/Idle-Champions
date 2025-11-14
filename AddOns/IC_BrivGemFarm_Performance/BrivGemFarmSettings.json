@@ -1,16 +1,16 @@
 {
-	"BrivJumpBuffer":"",
+	"BrivJumpBuffer":0,
 	"BuyChests":1,
 	"BuyGoldChestRatio":1,
 	"BuyGolds":0,
 	"BuySilverChestRatio":0,
 	"BuySilvers":1,
-	"DashWaitBuffer":"",
+	"DashWaitBuffer":30,
 	"DisableDashWait":0,
 	"FeatSwapEnabled":0,
 	"Fkeys":1,
-	"ForceOfflineGemThreshold":"",
-	"ForceOfflineRunThreshold":"",
+	"ForceOfflineGemThreshold":0,
+	"ForceOfflineRunThreshold":0,
 	"HiddenFarmWindow":0,
 	"IgnoreBrivHaste":0,
 	"LastSettingsUsed":"Default",
@@ -79,6 +79,6 @@
 	"StackZone":1071,
 	"TargetStacks":1586,
 	"WaitToBuyChests":1,
-	"WindowXPosition":"",
-	"WindowYPosition":""
+	"WindowXPosition":0,
+	"WindowYPosition":0
 }
