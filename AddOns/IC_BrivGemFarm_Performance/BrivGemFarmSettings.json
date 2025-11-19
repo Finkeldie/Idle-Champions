@@ -17,7 +17,7 @@
 	"MinGemCount":200000,
 	"MinGoldChestCount":0,
 	"MinSilverChestCount":0,
-	"MinStackZone":250,
+	"MinStackZone":390,
 	"OpenChests":1,
 	"OpenGolds":1,
 	"OpenSilvers":1,
@@ -73,11 +73,11 @@
 		1,
 		0
 	],
-	"RestartStackTime":10000,
+	"RestartStackTime":12000,
 	"RestoreLastWindowOnGameOpen":0,
 	"StackFailRecovery":1,
 	"StackZone":1071,
-	"TargetStacks":3586,
+	"TargetStacks":1586,
 	"WaitToBuyChests":1,
 	"WindowXPosition":0,
 	"WindowYPosition":0
