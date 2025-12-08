@@ -73,12 +73,12 @@
 		1,
 		0
 	],
-	"RestartStackTime":12000,
+	"RestartStackTime":12010,
 	"RestoreLastWindowOnGameOpen":0,
 	"StackFailRecovery":1,
 	"StackZone":1071,
 	"TargetStacks":1586,
-	"WaitToBuyChests":1,
+	"WaitToBuyChests":0,
 	"WindowXPosition":0,
 	"WindowYPosition":0
 }
