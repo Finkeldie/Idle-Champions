@@ -5,6 +5,10 @@
 			"Version":"v0.2.4"
 		},
 		{
+			"Name":"About",
+			"Version":"v0.3.4"
+		},
+		{
 			"Name":"Briv Gem Farm",
 			"Version":"v1.6.5"
 		},
@@ -14,19 +18,15 @@
 		},
 		{
 			"Name":"BrivGemFarm LevelUp",
-			"Version":"v1.4.7"
+			"Version":"v1.5.1"
 		},
 		{
 			"Name":"Chest Purchaser",
 			"Version":"v0.3.1"
 		},
 		{
-			"Name":"About",
-			"Version":"v0.3.4"
-		},
-		{
 			"Name":"RNG Waiting Room",
-			"Version":"v0.2.2"
+			"Version":"v0.3.1"
 		},
 		{
 			"Name":"Addon Example",
@@ -42,11 +42,11 @@
 		},
 		{
 			"Name":"BrivGemFarm Briv Feat Swap",
-			"Version":"v1.6.6"
+			"Version":"v1.6.9"
 		},
 		{
 			"Name":"BrivGemFarm HybridTurboStacking",
-			"Version":"v1.1.5"
+			"Version":"v1.2.5"
 		},
 		{
 			"Name":"Briv Gem Farm Potato",
@@ -96,6 +96,11 @@
 			"Version":"v0.2.4"
 		},
 		{
+			"Name":"About",
+			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_About",
+			"Version":"v0.3.4"
+		},
+		{
 			"Name":"Briv Gem Farm",
 			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_BrivGemFarm_Performance",
 			"Version":"v1.6.5"
@@ -108,7 +113,7 @@
 		{
 			"Name":"BrivGemFarm LevelUp",
 			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_BrivGemFarm_LevelUp_Extra",
-			"Version":"v1.4.7"
+			"Version":"v1.5.1"
 		},
 		{
 			"Name":"Chest Purchaser",
@@ -116,14 +121,14 @@
 			"Version":"v0.3.1"
 		},
 		{
-			"Name":"About",
-			"Url":"https://github.com/mikebaldi/Idle-Champions/tree/main/AddOns/IC_About",
-			"Version":"v0.3.4"
-		},
-		{
 			"Name":"RNG Waiting Room",
 			"Url":"https://github.com/imp444/IC_Addons/tree/main/IC_RNGWaitingRoom_Extra",
-			"Version":"v0.2.2"
+			"Version":"v0.3.1"
+		},
+		{
+			"Name":"Area Timing",
+			"Url":"https://github.com/imp444/Idle-Champions/tree/main/AddOns/IC_AreaTiming",
+			"Version":"v1.1.1"
 		},
 		{
 			"Name":"BrivGemFarm Advanced Settings",

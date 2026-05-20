@@ -51,32 +51,32 @@ class IC_BrivGemFarm_BrivFeatSwap_SharedFunctions_Class extends IC_SharedFunctio
         ; Prevent incorrect read if Briv is the only champion leveled in Q/E (e.g. using "Level Briv/Shandie to MinLevel first" LevelUp addon option)
         if (currentZone == 1)
             return
-        if (forceCheck OR g_SharedData.TriggerStart)
-            isFormation2 := this.IsCurrentFormation(this.Memory.GetFormationByFavorite(2))
+        if (!IC_BrivGemFarm_Class.BrivFunctions.HasSwappedFavoritesThisRun OR forceCheck)
+            isFormation2 := this.IsCurrentFormationLazy(this.Memory.GetFormationByFavorite(2), 2)
         else
             isFormation2 := this.Memory.ReadMostRecentFormationFavorite() == 2 ; (watch for fix for changing on failed swap)
         ; check to swap briv from favorite 2 to another (W to Q or E)
         if (isFormation2 AND isWalkZone)
         {
-            this.DirectedInput(,,["{e}"]*)
+            base.DoSwitchFormation(3)
             return
         }
         ; check to swap briv from favorite 2 to favorite 1 (W to Q)
         else if (isFormation2 AND !isWalkZone)
         {
-            this.DirectedInput(,,["{q}"]*)
+            base.DoSwitchFormation(1)
             return
         }
         ; Switch if still in modron formation.
-        else if (!g_SF.FormationLock AND g_BrivGemFarm.IsInModronFormation){
+        else if (!g_SF.FormationSwitchLock AND g_BrivGemFarm.IsInModronFormation){
         
               ; Q OR E depending on route.
             if (this.UnBenchBrivConditions(this.Settings))
-                this.DoSwitchFormation(1) 
+                this.DoSwitchFormation(1)
             else if (this.BenchBrivConditions(this.Settings))
                 this.DoSwitchFormation(3)
         }
-        if(g_BrivGemFarm.IsInModronFormation AND !this.IsCurrentFormation(g_SF.Memory.GetActiveModronFormation()))
+        if(g_BrivGemFarm.IsInModronFormation AND !this.IsCurrentFormationLazy(g_SF.Memory.GetActiveModronFormation(), 2))
             g_BrivGemFarm.IsInModronFormation := False
     }
 
@@ -94,25 +94,10 @@ class IC_BrivGemFarm_BrivFeatSwap_SharedFunctions_Class extends IC_SharedFunctio
         }
         if (currentZone != 1 AND currentZone != lastZone AND ((attackingMon := this.Memory.ReadNumAttackingMonstersReached()) >= 10 || (attackingRangedMon := this.Memory.ReadNumRangedAttackingMonsters())))
             lastZone := currentZone, this.FallBackFromZone(2000)
-        this.DoSwitchFormationInput(toFavorite)           
+        this.DoSwitchFormationInput(toFavorite) 
+        IC_BrivGemFarm_Class.BrivFunctions.HasSwappedFavoritesThisRun := True
         Sleep, % g_BrivUserSettingsFromAddons[ "BGFLU_MinLevelInputDelay" ]
         g_SharedData.BGFBFS_UpdateSkipAmount(toFavorite)
-    }
-
-    DoSwitchFormationInput(toFavorite := 1)
-    {
-        if(toFavorite == 1)
-            base.DirectedInput(,,["{q}"]*)
-        else if (toFavorite == 2)
-        {
-            isWalkZone := this.Settings["PreferredBrivJumpZones"][Mod( currentZone, 50) == 0 ? 50 : Mod( currentZone, 50)] == 0         
-            if (isWalkZone)
-                base.DirectedInput(,,["{e}"]*)
-            else
-                base.DirectedInput(,,["{q}"]*)
-        }
-        else if (toFavorite == 3)
-            base.DirectedInput(,,["{e}"]*)
     }
 
     ; If Briv has enough stacks to jump, don't force switch to e and wait for the boss to be killed.
@@ -144,7 +129,23 @@ class IC_BrivGemFarm_BrivFeatSwap_SharedFunctions_Added_Class
             if (v != -1)
                 return false
         return true
-    }   
+    }
+
+    DoSwitchFormationInput(toFavorite := 1)
+    {
+        if(toFavorite == 1)
+            this.DirectedInput(,,["{q}"]*)
+        else if (toFavorite == 2)
+        {
+            isWalkZone := this.Settings["PreferredBrivJumpZones"][Mod( currentZone, 50) == 0 ? 50 : Mod( currentZone, 50)] == 0         
+            if (isWalkZone)
+                this.DirectedInput(,,["{e}"]*)
+            else
+                this.DirectedInput(,,["{q}"]*)
+        }
+        else if (toFavorite == 3)
+            this.DirectedInput(,,["{e}"]*)
+    }
 }
 
 class IC_BrivGemFarm_BrivFeatSwap_IC_SharedData_Added_Class ;Added to IC_SharedData_Class

@@ -17,7 +17,7 @@
 	"MinGemCount":200000,
 	"MinGoldChestCount":0,
 	"MinSilverChestCount":0,
-	"MinStackZone":350,
+	"MinStackZone":450,
 	"OpenChests":1,
 	"OpenGolds":1,
 	"OpenSilvers":1,

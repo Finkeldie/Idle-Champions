@@ -1,3 +1,44 @@
+November 6, 2025
+    - Fixed Briv not leveling to max when below zone 1100.
+    - Fixes for infinite loop FORT stacking or recursion errors with a certain setting (offline melf stack setting now effectively disabled.)
+
+November 3, 2025
+    - Updated how stacking formation was checked again to make sure Tatyana didn't cause issuses.
+    - Optimized how stack FORT StackRestart functions.
+    - Removed recursive call.
+    - Added melf to stacking where possible. Tatyana force is removed.
+    - Fixed bug with GetFormationSaveBySlot not using slot.
+
+October 30, 2025
+    - Updated display to be rounded to the nearest stack.
+    - Updated how stacking formation is checked.
+
+October 29, 2025
+    - Added Emmote's fix to avoid getting stuck in W.
+    - Added Jame's other fix to avoid getting stuck in W.
+    - Updated to use proxy settings file.
+    - Updated x25 levelup to only togglectrl when pressing leveling key up and not for full leveling process.
+    - Fixed issues with not properly switching from W formation after restart.
+    - Updated IgnoreBrivHaste to not be swapped with PredictStacks. 
+    - PredictStacks accounts for Thellora, so use stack count that doesn't include Thellora.
+
+October 26, 2025
+    - Refactored Addon.
+    - Reduced method sizes to make the code chunks easier to parse.
+    - Fixed issues with predict stacks.
+    - Added timer off before starting timer to make sure it's only run once.
+    - Made FORT restart switch to W formation first.
+
+October 22, 2025
+    - Changed update URL to Anti's for now.
+    - Prevet FORT restart happening on very first run.
+
+October 19, 2025
+    - Many fixes/changes to work with BrivGemFarm 4.4.3
+    - Updated to use BrivGemFarm's PredictStacks function.
+    - Added Emmote's incremental leveling code.
+    - Updated StackNormal to allow ignoring the melf check for cases such as a forced restart.
+    
 December 12, 2024 - v1.1.5
     - Stacks prediction handles the "Accurate Acrobatics" Briv feat that rounds down his jump amount.
     - Briv stacks gained while clearing the zone before stacking and setting up the stack formation are counted when stacks prediction is on.
