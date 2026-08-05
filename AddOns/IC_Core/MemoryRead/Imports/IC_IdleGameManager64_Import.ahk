@@ -235,8 +235,13 @@ this.game.gameInstances.ActiveCampaignData.gold := New GameObjectStructure(this.
 this.game.gameInstances.ActiveCampaignData.currentArea.areaDef := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentArea,"Int", [0x10])
 this.game.gameInstances.ActiveCampaignData.currentArea.areaDef.MonsterDamageMultiplier := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentArea.areaDef,"Double", [0x120])
 this.game.gameInstances.ActiveCampaignData.currentRules := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData,"Int", [0x20])
+<<<<<<< Updated upstream
 this.game.gameInstances.ActiveCampaignData.currentRules.MonsterDamageModifier := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules,"Double", [0x3c8])
 this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules,"Int", [0xf0])
+=======
+this.game.gameInstances.ActiveCampaignData.currentRules.MonsterDamageModifier := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules,"Double", [0x390])
+this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules,"Int", [0xd8])
+>>>>>>> Stashed changes
 this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats.BaseDPS := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats,"Double", [0x58])
 this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats.DPSGrowthRateCurve := New GameObjectStructure(this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats,"Dict", [0x18])
 this.game.gameInstances.ActiveCampaignData.currentRules.monsterbaseStats.DPSGrowthRateCurve._CollectionKeyType := "System.Int32"
